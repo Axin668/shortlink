@@ -1,5 +1,7 @@
 package com.axinstar.shortlink.admin.service.impl;
 
+import com.axinstar.shortlink.admin.common.convention.exception.ClientException;
+import com.axinstar.shortlink.admin.common.enums.UserErrorCodeEnum;
 import com.axinstar.shortlink.admin.dao.entity.UserDO;
 import com.axinstar.shortlink.admin.dao.mapper.UserMapper;
 import com.axinstar.shortlink.admin.dto.resp.UserRespDTO;
@@ -21,7 +23,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                 .eq(UserDO::getUsername, username);
         UserDO userDO = baseMapper.selectOne(queryWrapper);
         if (userDO == null) {
-            return null;
+            throw new ClientException(UserErrorCodeEnum.USER_NULL);
         }
         UserRespDTO result = new UserRespDTO();
         BeanUtils.copyProperties(userDO, result);
