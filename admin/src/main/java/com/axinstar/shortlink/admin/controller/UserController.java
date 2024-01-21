@@ -1,7 +1,7 @@
 package com.axinstar.shortlink.admin.controller;
 
 import com.axinstar.shortlink.admin.common.convention.result.Result;
-import com.axinstar.shortlink.admin.common.enums.UserErrorCodeEnum;
+import com.axinstar.shortlink.admin.common.convention.result.Results;
 import com.axinstar.shortlink.admin.dto.resp.UserRespDTO;
 import com.axinstar.shortlink.admin.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +23,6 @@ public class UserController {
      */
     @GetMapping("/api/shortlink/v1/user/{username}")
     public Result<UserRespDTO> getUserByUsername(@PathVariable("username") String username) {
-        UserRespDTO result = userService.getUserByUsername(username);
-        if (result == null) {
-            return new Result<UserRespDTO>().setCode(UserErrorCodeEnum.USER_NULL.code()).setMessage(UserErrorCodeEnum.USER_NULL.message());
-        } else {
-            return new Result<UserRespDTO>().setCode("0").setData(result);
-        }
+        return Results.success(userService.getUserByUsername(username));
     }
 }

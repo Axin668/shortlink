@@ -1,4 +1,4 @@
-package com.axinstar.shortlink.admin.common.enums;
+package com.axinstar.shortlink.admin.common.web;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
