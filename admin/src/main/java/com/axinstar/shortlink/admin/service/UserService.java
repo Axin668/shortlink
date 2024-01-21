@@ -1,6 +1,7 @@
 package com.axinstar.shortlink.admin.service;
 
 import com.axinstar.shortlink.admin.dao.entity.UserDO;
+import com.axinstar.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.axinstar.shortlink.admin.dto.resp.UserRespDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -24,4 +25,11 @@ public interface UserService extends IService<UserDO> {
      * @return 用户名存在返回 True, 不存在返回 False
      */
     Boolean hasUsername(String username);
+
+    /**
+     * 注册用户
+     *
+     * @param requestParam 注册用户请求参数
+     */
+    void register(UserRegisterReqDTO requestParam);
 }
