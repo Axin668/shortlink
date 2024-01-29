@@ -4,7 +4,7 @@ import com.axinstar.shortlink.admin.dao.entity.UserDO;
 import com.axinstar.shortlink.admin.dto.req.UserLoginReqDTO;
 import com.axinstar.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.axinstar.shortlink.admin.dto.req.UserUpdateReqDTO;
-import com.axinstar.shortlink.admin.dto.resp.UserLoginResDTO;
+import com.axinstar.shortlink.admin.dto.resp.UserLoginRespDTO;
 import com.axinstar.shortlink.admin.dto.resp.UserRespDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -49,7 +49,7 @@ public interface UserService extends IService<UserDO> {
      * @param requestParam 用户登录请求参数
      * @return 用户登录返回参数 Token
      */
-    UserLoginResDTO login(UserLoginReqDTO requestParam);
+    UserLoginRespDTO login(UserLoginReqDTO requestParam);
 
     /**
      * 检查用户是否登录

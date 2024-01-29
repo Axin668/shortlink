@@ -7,7 +7,7 @@ import com.axinstar.shortlink.admin.dto.req.UserLoginReqDTO;
 import com.axinstar.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.axinstar.shortlink.admin.dto.req.UserUpdateReqDTO;
 import com.axinstar.shortlink.admin.dto.resp.UserActualRespDTO;
-import com.axinstar.shortlink.admin.dto.resp.UserLoginResDTO;
+import com.axinstar.shortlink.admin.dto.resp.UserLoginRespDTO;
 import com.axinstar.shortlink.admin.dto.resp.UserRespDTO;
 import com.axinstar.shortlink.admin.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +68,7 @@ public class UserController {
      * 用户登录
      */
     @PostMapping("/api/short-link/v1/user/login")
-    public Result<UserLoginResDTO> login(@RequestBody UserLoginReqDTO requestParam) {
+    public Result<UserLoginRespDTO> login(@RequestBody UserLoginReqDTO requestParam) {
         return Results.success(userService.login(requestParam));
     }
 

@@ -11,7 +11,7 @@ import com.axinstar.shortlink.admin.dao.mapper.UserMapper;
 import com.axinstar.shortlink.admin.dto.req.UserLoginReqDTO;
 import com.axinstar.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.axinstar.shortlink.admin.dto.req.UserUpdateReqDTO;
-import com.axinstar.shortlink.admin.dto.resp.UserLoginResDTO;
+import com.axinstar.shortlink.admin.dto.resp.UserLoginRespDTO;
 import com.axinstar.shortlink.admin.dto.resp.UserRespDTO;
 import com.axinstar.shortlink.admin.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -86,7 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     }
 
     @Override
-    public UserLoginResDTO login(UserLoginReqDTO requestParam) {
+    public UserLoginRespDTO login(UserLoginReqDTO requestParam) {
         Boolean hasLogin = stringRedisTemplate.hasKey("login_" + requestParam.getUsername());
         if (hasLogin != null && hasLogin) {
             throw new ClientException("用户已登录");
@@ -110,7 +110,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         String uuid = UUID.randomUUID().toString();
         stringRedisTemplate.opsForHash().put("login_" + requestParam.getUsername(), uuid, JSON.toJSONString(userDO));
         stringRedisTemplate.expire("login_" + requestParam.getUsername(), 30L, TimeUnit.MINUTES);
-        return new UserLoginResDTO(uuid);
+        return new UserLoginRespDTO(uuid);
     }
 
     @Override
