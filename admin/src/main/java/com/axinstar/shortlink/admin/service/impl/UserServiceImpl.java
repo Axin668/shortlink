@@ -13,6 +13,7 @@ import com.axinstar.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.axinstar.shortlink.admin.dto.req.UserUpdateReqDTO;
 import com.axinstar.shortlink.admin.dto.resp.UserLoginRespDTO;
 import com.axinstar.shortlink.admin.dto.resp.UserRespDTO;
+import com.axinstar.shortlink.admin.service.GroupService;
 import com.axinstar.shortlink.admin.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -39,6 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
     private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
+    private final GroupService groupService;
 
     public UserRespDTO getUserByUsername(String username) {
         LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class)
@@ -74,6 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                     throw new ClientException(UserErrorCodeEnum.USER_EXIST);
                 }
                 userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
+                groupService.saveGroup("默认分组");
                 return;
             }
             throw new ClientException(UserErrorCodeEnum.USER_NAME_EXIST);
