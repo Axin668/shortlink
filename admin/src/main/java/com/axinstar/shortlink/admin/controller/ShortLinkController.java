@@ -1,7 +1,7 @@
 package com.axinstar.shortlink.admin.controller;
 
 import com.axinstar.shortlink.admin.common.convention.result.Result;
-import com.axinstar.shortlink.admin.remote.dto.ShortLinkRemoteService;
+import com.axinstar.shortlink.admin.remote.ShortLinkRemoteService;
 import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
 import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkCreateRespDTO;
