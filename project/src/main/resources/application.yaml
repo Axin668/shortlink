@@ -12,3 +12,7 @@ spring:
       host: 127.0.0.1
       port: 6379
       password: chen2020...
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html
