@@ -40,9 +40,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
-import static com.axinstar.shortlink.project.common.constant.RedisKeyConstant.GOTO_SHORT_LINK_KEY;
-import static com.axinstar.shortlink.project.common.constant.RedisKeyConstant.LOCK_GOTO_SHORT_LINK_KEY;
+import static com.axinstar.shortlink.project.common.constant.RedisKeyConstant.*;
 
 /**
  * 短链接接口实现层
@@ -181,9 +181,21 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     public void restoreUrl(String shortUri, HttpServletRequest request, HttpServletResponse response) {
         String serverName = request.getServerName();
         String fullShortUrl = serverName + "/" + shortUri;
+        // (1) 首先判断缓存是否存在
         String originalLink = stringRedisTemplate.opsForValue().get(String.format(GOTO_SHORT_LINK_KEY, fullShortUrl));
         if (StrUtil.isNotBlank(originalLink)) {
             response.sendRedirect(originalLink);
+            return;
+        }
+        // (2) 上述缓存不存在, 则需要判断一下布隆过滤器是否存在("存在则可能在DB中存在, 不存在则一定不存在")
+        boolean contains = shortUriCreateCachePenetrationBloomFilter.contains(fullShortUrl);
+        if (!contains) {
+            // 一定在DB中不存在
+            return;
+        }
+        // (3) 判断一下"空缓存"是否存在, 如果存在则表明DB为空, 就不用查了
+        String gotoIsNullShortLink = stringRedisTemplate.opsForValue().get(String.format(GOTO_IS_NULL_SHORT_LINK_KEY, fullShortUrl));
+        if (StrUtil.isNotBlank(gotoIsNullShortLink)) {
             return;
         }
         // 分布式锁 + 双重锁来避免缓存击穿问题(同一时间大量短链接过期, 导致大量请求访问数据库)
@@ -200,7 +212,9 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                     .eq(ShortLinkGotoDO::getFullShortUrl, fullShortUrl);
             ShortLinkGotoDO shortLinkGotoDO = shortLinkGotoMapper.selectOne(linkGotoQueryWrapper);
             if (shortLinkGotoDO == null) {
-                // 严谨来说此处需要进行封控
+                // 严谨来说此处需要进行风控
+                // DB查询为空, 则把该key在上一级缓存中置为空("-"), 避免后续重复查库
+                stringRedisTemplate.opsForValue().set(String.format(GOTO_SHORT_LINK_KEY, fullShortUrl), "-", 30, TimeUnit.MINUTES);
                 return;
             }
             LambdaQueryWrapper<ShortLinkDO> queryWrapper = Wrappers.lambdaQuery(ShortLinkDO.class)
