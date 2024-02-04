@@ -18,6 +18,7 @@ import com.axinstar.shortlink.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.axinstar.shortlink.project.dto.resp.ShortLinkPageRespDTO;
 import com.axinstar.shortlink.project.service.ShortLinkService;
 import com.axinstar.shortlink.project.toolkit.HashUtil;
+import com.axinstar.shortlink.project.toolkit.LinkUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -97,6 +98,13 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 throw new ServiceException("短链接生成重复");
             }
         }
+        // 缓存预热
+        stringRedisTemplate.opsForValue().set(
+                String.format(GOTO_SHORT_LINK_KEY, fullShortUrl),
+                requestParam.getOriginUrl(),
+                LinkUtil.getLinkCacheValidTime(requestParam.getValidDate()),
+                TimeUnit.MILLISECONDS
+        );
         shortUriCreateCachePenetrationBloomFilter.add(fullShortUrl);
 
         return ShortLinkCreateRespDTO.builder()
