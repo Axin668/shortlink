@@ -2,6 +2,7 @@ package com.axinstar.shortlink.project.service;
 
 import com.axinstar.shortlink.project.dao.entity.ShortLinkDO;
 import com.axinstar.shortlink.project.dto.req.RecycleBinRecoverReqDTO;
+import com.axinstar.shortlink.project.dto.req.RecycleBinRemoveReqDTO;
 import com.axinstar.shortlink.project.dto.req.RecycleBinSaveReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkRecycleBinPageReqDTO;
 import com.axinstar.shortlink.project.dto.resp.ShortLinkPageRespDTO;
@@ -16,7 +17,7 @@ public interface RecycleBinService extends IService<ShortLinkDO> {
     /**
      * 保存回收站
      *
-     * @param requestParam 请求参数
+     * @param requestParam 删除短链接请求参数
      */
     void saveRecycleBin(RecycleBinSaveReqDTO requestParam);
 
@@ -31,7 +32,14 @@ public interface RecycleBinService extends IService<ShortLinkDO> {
     /**
      * 恢复短链接
      *
-     * @param requestParam 请求参数
+     * @param requestParam 恢复短链接请求参数
      */
     void recoverRecycleBin(RecycleBinRecoverReqDTO requestParam);
+
+    /**
+     * 回收站移除短链接
+     *
+     * @param requestParam 回收站移除短链接请求参数
+     */
+    void removeRecycleBin(RecycleBinRemoveReqDTO requestParam);
 }
