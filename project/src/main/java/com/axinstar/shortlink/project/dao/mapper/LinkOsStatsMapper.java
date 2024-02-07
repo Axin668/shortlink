@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
  * 操作系统计访问持久层
  */
 @Mapper
-public interface LinkOsStatsDOMapper extends BaseMapper<LinkOsStatsDO> {
+public interface LinkOsStatsMapper extends BaseMapper<LinkOsStatsDO> {
 
     /**
      * 记录地区访问监控数据
