@@ -400,7 +400,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .os(os)
                         .device(device)
                         .network(network)
-                        .locale(unknownFlag ? "未知" : localeResultObj.getString("city"))
+                        .locale(unknownFlag ? "未知" : province)
                         .build();
                 linkAccessLogsMapper.insert(linkAccessLogsDO);
             }
