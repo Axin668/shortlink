@@ -13,14 +13,8 @@ import com.alibaba.fastjson2.JSONObject;
 import com.axinstar.shortlink.project.common.convention.exception.ClientException;
 import com.axinstar.shortlink.project.common.convention.exception.ServiceException;
 import com.axinstar.shortlink.project.common.enums.ValidateTypeEnum;
-import com.axinstar.shortlink.project.dao.entity.LinkAccessStatsDO;
-import com.axinstar.shortlink.project.dao.entity.LinkLocaleStatsDO;
-import com.axinstar.shortlink.project.dao.entity.ShortLinkDO;
-import com.axinstar.shortlink.project.dao.entity.ShortLinkGotoDO;
-import com.axinstar.shortlink.project.dao.mapper.LinkAccessStatsMapper;
-import com.axinstar.shortlink.project.dao.mapper.LinkLocaleStatsMapper;
-import com.axinstar.shortlink.project.dao.mapper.ShortLinkGotoMapper;
-import com.axinstar.shortlink.project.dao.mapper.ShortLinkMapper;
+import com.axinstar.shortlink.project.dao.entity.*;
+import com.axinstar.shortlink.project.dao.mapper.*;
 import com.axinstar.shortlink.project.dto.req.ShortLinkCreateReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
@@ -77,6 +71,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private final RedissonClient redissonClient;
     private final LinkAccessStatsMapper linkAccessStatsMapper;
     private final LinkLocaleStatsMapper linkLocaleStatsMapper;
+    private final LinkOsStatsDOMapper linkOsStatsDOMapper;
 
     @Value("${short-link.stats.locale.amap-key}")
     private String statsLocaleAmapKey;
@@ -353,6 +348,14 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .cnt(1)
                         .build();
                 linkLocaleStatsMapper.shortLinkLocaleStats(linkLocaleStatsDO);
+                LinkOsStatsDO linkOsStatsDO = LinkOsStatsDO.builder()
+                        .fullShortUrl(fullShortUrl)
+                        .gid(gid)
+                        .date(new Date())
+                        .os(LinkUtil.getOs(request))
+                        .cnt(1)
+                        .build();
+                linkOsStatsDOMapper.shortLinkOsStats(linkOsStatsDO);
             }
         } catch (Exception ex) {
             log.error("短链接访问量统计异常", ex);
