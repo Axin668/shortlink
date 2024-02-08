@@ -5,11 +5,9 @@ import com.axinstar.shortlink.admin.common.convention.result.Results;
 import com.axinstar.shortlink.admin.remote.ShortLinkRemoteService;
 import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
-import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkStatsReqDTO;
 import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkCreateRespDTO;
 import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkPageRespDTO;
-import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkStatsRespDTO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,13 +49,5 @@ public class ShortLinkController {
     @GetMapping("/api/short-link/admin/v1/page")
     public Result<IPage<ShortLinkPageRespDTO>> pageShortLink(ShortLinkPageReqDTO requestParam) {
         return shortLinkRemoteService.pageShortLink(requestParam);
-    }
-
-    /**
-     * 访问单个短链接指定时间内监控数据
-     */
-    @GetMapping("/api/short-link/admin/v1/stats")
-    public Result<ShortLinkStatsRespDTO> shortLinkStats(ShortLinkStatsReqDTO requestParam) {
-        return shortLinkRemoteService.shortLinkStats(requestParam);
     }
 }
