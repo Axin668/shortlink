@@ -1,14 +1,12 @@
 package com.axinstar.shortlink.admin.remote;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
 import com.axinstar.shortlink.admin.common.convention.result.Result;
 import com.axinstar.shortlink.admin.remote.dto.req.*;
-import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkCreateRespDTO;
-import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkGroupCountQueryRespDTO;
-import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkPageRespDTO;
-import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkStatsRespDTO;
+import com.axinstar.shortlink.admin.remote.dto.resp.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.HashMap;
@@ -30,7 +28,7 @@ public interface ShortLinkRemoteService {
         String resultBodyStr = HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/create", JSON.toJSONString(requestParam));
         return JSON.parseObject(resultBodyStr, new TypeReference<>() {
         });
-    };
+    }
 
     /**
      * 修改短链接
@@ -137,13 +135,16 @@ public interface ShortLinkRemoteService {
      * @return 短链接监控信息
      */
     default Result<ShortLinkStatsRespDTO> oneShortLinkStats(ShortLinkStatsReqDTO requestParam) {
-        Map<String, Object> requestMap = new HashMap<>();
-        requestMap.put("fullShortUrl", requestParam.getFullShortUrl());
-        requestMap.put("gid", requestParam.getGid());
-        requestMap.put("startDate", requestParam.getStartDate());
-        requestMap.put("endDate", requestParam.getEndDate());
-        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/stats", requestMap);
+        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/stats", BeanUtil.beanToMap(requestParam));
+        return JSON.parseObject(resultPageStr, new TypeReference<>() {
+        });
+    }
 
+    default Result<IPage<ShortLinkStatsAccessRecordRespDTO>> shortLinkStatsAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam) {
+        Map<String, Object> stringObjectMap = BeanUtil.beanToMap(requestParam, false, true);
+        stringObjectMap.remove("orders");
+        stringObjectMap.remove("records");
+        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/stats/access-record", stringObjectMap);
         return JSON.parseObject(resultPageStr, new TypeReference<>() {
         });
     }
