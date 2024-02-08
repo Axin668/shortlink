@@ -8,6 +8,7 @@ import com.axinstar.shortlink.admin.remote.dto.req.*;
 import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkCreateRespDTO;
 import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkPageRespDTO;
+import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkStatsRespDTO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.HashMap;
@@ -127,5 +128,17 @@ public interface ShortLinkRemoteService {
      */
     default void removeRecycleBin(RecycleBinRemoveReqDTO requestParam) {
         HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/remove", JSON.toJSONString(requestParam));
+    }
+
+    default Result<ShortLinkStatsRespDTO> shortLinkStats(ShortLinkStatsReqDTO requestParam) {
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("fullShortUrl", requestParam.getFullShortUrl());
+        requestMap.put("gid", requestParam.getGid());
+        requestMap.put("startDate", requestParam.getStartDate());
+        requestMap.put("endDate", requestParam.getEndDate());
+        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/stats", requestMap);
+
+        return JSON.parseObject(resultPageStr, new TypeReference<>() {
+        });
     }
 }
