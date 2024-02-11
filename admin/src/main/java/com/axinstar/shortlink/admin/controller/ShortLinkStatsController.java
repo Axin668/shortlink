@@ -2,6 +2,7 @@ package com.axinstar.shortlink.admin.controller;
 
 import com.axinstar.shortlink.admin.common.convention.result.Result;
 import com.axinstar.shortlink.admin.remote.ShortLinkRemoteService;
+import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkGroupStatsAccessRecordReqDTO;
 import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkGroupStatsReqDTO;
 import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkStatsAccessRecordReqDTO;
 import com.axinstar.shortlink.admin.remote.dto.req.ShortLinkStatsReqDTO;
@@ -36,7 +37,7 @@ public class ShortLinkStatsController {
     /**
      * 访问单个短链接指定时间内监控历史记录
      */
-    @GetMapping("/api/short-link/admin/admin/v1/stats/access-record")
+    @GetMapping("/api/short-link/admin/v1/stats/access-record")
     public Result<IPage<ShortLinkStatsAccessRecordRespDTO>> shortLinkStatsAccessRecord(ShortLinkStatsAccessRecordReqDTO requestParam) {
         return shortLinkRemoteService.shortLinkStatsAccessRecord(requestParam);
     }
@@ -47,5 +48,13 @@ public class ShortLinkStatsController {
     @GetMapping("/api/short-link/admin/v1/stats/group")
     public Result<ShortLinkStatsRespDTO> groupShortLinkStats(ShortLinkGroupStatsReqDTO requestParam) {
         return shortLinkRemoteService.groupShortLinkStats(requestParam);
+    }
+
+    /**
+     * 访问分组短链接指定时间内监控历史记录
+     */
+    @GetMapping("/api/short-link/admin/v1/stats/access-record/group")
+    public Result<IPage<ShortLinkStatsAccessRecordRespDTO>> groupShortLinkStatsAccessRecord(ShortLinkGroupStatsAccessRecordReqDTO requestParam) {
+        return shortLinkRemoteService.groupShortLinkStatsAccessRecord(requestParam);
     }
 }
