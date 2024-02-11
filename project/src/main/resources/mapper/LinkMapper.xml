@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.axinstar.shortlink.project.dao.mapper.ShortLinkMapper">
+
+    <!-- 分页查询短链接 -->
+    <select id="pageLink" parameterType="com.axinstar.shortlink.project.dto.req.ShortLinkPageReqDTO"
+            resultType="com.axinstar.shortlink.project.dao.entity.ShortLinkDO">
+        select t.*,
+               COALESCE(s.today_pv, 0) as todayPv,
+               COALESCE(s.today_uv, 0) as todayUv,
+               COALESCE(s.today_uip, 0) as todayUip
+        from t_link t
+            left join t_link_stats_today s
+                on t.gid = s.gid
+                and t.full_short_url = s.full_short_url
+                and s.date = CURDATE()
+        where t.gid = #{gid}
+            and t.enable_status = 0
+            and t.del_flag = 0
+        <choose>
+            <when test="orderTag == 'todayPv'">
+                order by todayPv desc
+            </when>
+            <when test="orderTag == 'todayUv'">
+                order by todayUv desc
+            </when>
+            <when test="orderTag == 'todayUip'">
+                order by todayUip desc
+            </when>
+            <when test="orderTag == 'totalPv'">
+                order by t.total_pv desc
+            </when>
+            <when test="orderTag == 'totalUv'">
+                order by t.total_uv desc
+            </when>
+            <when test="orderTag == 'totalUip'">
+                order by t.total_uip desc
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+</mapper>
