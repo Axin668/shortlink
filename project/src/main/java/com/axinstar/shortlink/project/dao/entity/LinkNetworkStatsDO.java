@@ -1,5 +1,6 @@
 package com.axinstar.shortlink.project.dao.entity;
 
+import com.axinstar.shortlink.project.common.database.BaseDO;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LinkNetworkStatsDO {
+public class LinkNetworkStatsDO extends BaseDO {
 
     /**
      * id
