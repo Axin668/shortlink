@@ -2,9 +2,11 @@ package com.axinstar.shortlink.project.controller;
 
 import com.axinstar.shortlink.project.common.convention.result.Result;
 import com.axinstar.shortlink.project.common.convention.result.Results;
+import com.axinstar.shortlink.project.dto.req.ShortLinkBatchCreateReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkCreateReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
+import com.axinstar.shortlink.project.dto.resp.ShortLinkBatchCreateRespDTO;
 import com.axinstar.shortlink.project.dto.resp.ShortLinkCreateRespDTO;
 import com.axinstar.shortlink.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.axinstar.shortlink.project.dto.resp.ShortLinkPageRespDTO;
@@ -62,5 +64,13 @@ public class ShortLinkController {
     @GetMapping("/api/short-link/v1/count")
     public Result<List<ShortLinkGroupCountQueryRespDTO>> listGroupShortLink(@RequestParam("requestParam") List<String> requestParam) {
         return Results.success(shortLinkService.listGroupShortLinkCount(requestParam));
+    }
+
+    /**
+     * 批量创建短链接
+     */
+    @PostMapping("/api/short-link/v1/create/batch")
+    public Result<ShortLinkBatchCreateRespDTO> batchCreateShortLink(@RequestBody ShortLinkBatchCreateReqDTO requestParam) {
+        return Results.success(shortLinkService.batchCreateShortLink(requestParam));
     }
 }

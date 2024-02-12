@@ -1,9 +1,11 @@
 package com.axinstar.shortlink.project.service;
 
 import com.axinstar.shortlink.project.dao.entity.ShortLinkDO;
+import com.axinstar.shortlink.project.dto.req.ShortLinkBatchCreateReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkCreateReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import com.axinstar.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
+import com.axinstar.shortlink.project.dto.resp.ShortLinkBatchCreateRespDTO;
 import com.axinstar.shortlink.project.dto.resp.ShortLinkCreateRespDTO;
 import com.axinstar.shortlink.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.axinstar.shortlink.project.dto.resp.ShortLinkPageRespDTO;
@@ -59,4 +61,12 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
      * @param response HTTP 响应
      */
     void restoreUrl(String shortUri, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 批量创建短链接
+     *
+     * @param requestParam 批量创建短链接请求参数
+     * @return 批量创建短链接返回参数
+     */
+    ShortLinkBatchCreateRespDTO batchCreateShortLink(ShortLinkBatchCreateReqDTO requestParam);
 }
