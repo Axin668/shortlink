@@ -85,6 +85,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     @Value("${short-link.domain.default}")
     private String createShortLinkDefaultDomain;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ShortLinkCreateRespDTO createShortLink(ShortLinkCreateReqDTO requestParam) {
         verificationWhitelist(requestParam.getOriginUrl());
@@ -120,7 +121,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             baseMapper.insert(shortLinkDO);
             shortLinkGotoMapper.insert(linkGotoDO);
         } catch (DuplicateKeyException ex) {
-            // 布隆过滤器不存在就一定在DB中不存在, 但是这时可能被别的请求插入了导致存在
+            // 布隆过滤器不存在就一定在DB中不存在, 但是这时可能被别的请求插入了导致存在(并发场景下)
             log.warn("短链接: {} 重复入库", fullShortUrl);
             throw new ServiceException(String.format("短链接: %s 生成重复", fullShortUrl));
         }
