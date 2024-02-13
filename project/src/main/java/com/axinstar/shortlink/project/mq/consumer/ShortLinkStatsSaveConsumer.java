@@ -63,11 +63,11 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
         RecordId id = message.getId();
         // 如果消息已经消费过, 直接return
         if (messageQueueIdempotentHandler.isMessageProcessed(id.toString())) {
-            // 判断当前的消息是否执行完成
+            // 判断当前的消息是否执行完成(消息已走完流程)
             if (messageQueueIdempotentHandler.isAccomplish(id.toString())) {
                 return;
             }
-            // 抛出异常让mq重试
+            // 抛出异常让mq重试(消息消费中, 未走完流程)
             throw new ServiceException("消息未完成流程, 需要消息队列重试");
         }
         try {
@@ -84,6 +84,8 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
             messageQueueIdempotentHandler.delMessageProcessed(id.toString());
             log.error("记录短链接监控消费异常", ex);
         }
+        // 设置消息走完流程(防止宕机、断电等极端情况导致走不到"删除唯一标识"步骤)
+        // Accomplish相关方法均是为了防止极端情况
         messageQueueIdempotentHandler.setAccomplish(id.toString());
     }
 
