@@ -9,7 +9,7 @@ import com.axinstar.shortlink.admin.dao.mapper.GroupMapper;
 import com.axinstar.shortlink.admin.dto.req.ShortLinkGroupSortReqDTO;
 import com.axinstar.shortlink.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import com.axinstar.shortlink.admin.dto.resp.ShortLinkGroupRespDTO;
-import com.axinstar.shortlink.admin.remote.ShortLinkRemoteService;
+import com.axinstar.shortlink.admin.remote.ShortLinkActualRemoteService;
 import com.axinstar.shortlink.admin.remote.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.axinstar.shortlink.admin.service.GroupService;
 import com.axinstar.shortlink.admin.toolkit.RandomGenerator;
@@ -38,16 +38,11 @@ import static com.axinstar.shortlink.admin.common.constant.RedisCacheConstant.LO
 @RequiredArgsConstructor
 public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implements GroupService {
 
+    private final ShortLinkActualRemoteService shortLinkActualRemoteService;
     private final RedissonClient redissonClient;
 
     @Value("${short-link.group.max-num}")
     private Integer groupMaxNum;
-
-    /**
-     * 后续重构为 SpringCloud Feign 调用
-     */
-    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService(){
-    };
 
     @Override
     public void saveGroup(String groupName) {
@@ -92,7 +87,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
         List<GroupDO> groupDOList = baseMapper.selectList(queryWrapper);
 
         // 利用当前用户的所有gid 查询 各个分组内短链接数量
-        Result<List<ShortLinkGroupCountQueryRespDTO>> listResult = shortLinkRemoteService
+        Result<List<ShortLinkGroupCountQueryRespDTO>> listResult = shortLinkActualRemoteService
                 .listGroupShortLink(groupDOList.stream().map(GroupDO::getGid).toList());
         List<ShortLinkGroupRespDTO> shortLinkGroupRespDTOList = BeanUtil.copyToList(groupDOList, ShortLinkGroupRespDTO.class);
         // 填充各个分组的短链接数量
