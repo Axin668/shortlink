@@ -11,8 +11,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 @SpringBootApplication(scanBasePackages = {
 		"com.axinstar.shortlink.admin",
-		"com.axinstar.shortlink.project",
-		"com.axinstar.shortlink.aggregation"
+		"com.axinstar.shortlink.project"
 })
 @MapperScan(value = {
 		"com.nageoffer.shortlink.project.dao.mapper",
