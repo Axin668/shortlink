@@ -32,12 +32,13 @@ short-link:
   goto-domain:
     white-list:
       enable: true
-      names: '拿个offer,知乎,掘金,博客园'
+      names: '知乎,掘金,博客园,CSDN,个人博客'
       details:
-        - nageoffer.com
         - zhihu.com
         - juejin.cn
         - cnblogs.com
+        - csdn.net
+        - blog.axinstar.top
 
 mybatis-plus:
   configuration:
