@@ -3,43 +3,39 @@
     <el-container>
       <el-header height="54px" style="padding: 0">
         <div class="header">
-          <div @click="toMySpace" class="logo">拿个offer-SaaS短链接</div>
+          <div @click="toMySpace" class="logo">星辰Star-SaaS短链接</div>
           <div style="display: flex; align-items: center">
             <a
               class="link-span"
               style="text-decoration: none"
               target="_blank"
-              href="https://nageoffer.com/shortlink/"
-              >官方文档</a
+              href="https://blog.axinstar.top/"
+              >作者主页</a
             >
             <a
               class="link-span"
               style="text-decoration: none"
               target="_blank"
-              href="https://nageoffer.com/group/"
-              >加沟通群</a
+              href="https://oss.axinstar.top/images/QRCode.webp"
+              >微信联系</a
             >
             <a
-                class="link-span"
-                style="text-decoration: none"
-                target="_blank"
-                href="https://nageoffer.com/shortlink/video/"
-            >🔥视频教程</a
+              class="link-span"
+              style="text-decoration: none"
+              target="_blank"
+              href="https://admin.axinstar.top/"
+              >🔥管理中台</a
             >
             <a
-                class="link-span"
-                style="text-decoration: none"
-                target="_blank"
-                href="http://shortlink.magestack.cn"
-            >演示环境</a
+              class="link-span"
+              style="text-decoration: none"
+              target="_blank"
+              href="https://shortlink.axinstar.top/"
+              >演示环境</a
             >
             <el-dropdown>
               <div class="block">
-                <span
-                    class="name-span"
-                    style="text-decoration: none"
-                >{{username}}</span
-                >
+                <span class="name-span" style="text-decoration: none">{{ username }}</span>
               </div>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -192,7 +188,7 @@ const truncateText = (text, maxLength) => {
 
 .link-span {
   color: #fff;
-  opacity: .6;
+  opacity: 0.6;
   margin-right: 30px;
   font-size: 16px;
   font-family: 'Helvetica Neue', Helvetica, STHeiTi, Arial, sans-serif;
@@ -208,7 +204,7 @@ const truncateText = (text, maxLength) => {
 
 .name-span {
   color: #fff;
-  opacity: .6;
+  opacity: 0.6;
   margin-right: 30px;
   font-size: 12px;
   font-family: 'Helvetica Neue', Helvetica, STHeiTi, Arial, sans-serif;
