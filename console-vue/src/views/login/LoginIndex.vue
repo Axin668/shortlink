@@ -31,6 +31,11 @@
                 <template v-slot:prepend> 密<span class="second-font">码</span> </template>
               </el-input>
             </el-form-item>
+            <!-- 账号密码提示 -->
+            <div style="color: #067aee; margin: 0 0 0px 0; font-size: 12px">
+              <span>游客账户: guest<span class="second-font"></span></span>
+              <span class="ml-4">密码: 12345678</span>
+            </div>
           </div>
           <div class="btn-gourp">
             <div>
