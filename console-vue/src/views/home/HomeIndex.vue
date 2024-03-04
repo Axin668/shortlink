@@ -20,22 +20,26 @@
               >微信联系</a
             >
             <a
-              class="link-span"
-              style="text-decoration: none"
-              target="_blank"
-              href="https://admin.axinstar.top/"
+                class="link-span"
+                style="text-decoration: none"
+                target="_blank"
+                href="https://admin.axinstar.top/"
               >🔥管理中台</a
             >
             <a
-              class="link-span"
-              style="text-decoration: none"
-              target="_blank"
-              href="https://shortlink.axinstar.top/"
+                class="link-span"
+                style="text-decoration: none"
+                target="_blank"
+                href="https://shortlink.axinstar.top/"
               >演示环境</a
             >
             <el-dropdown>
               <div class="block">
-                <span class="name-span" style="text-decoration: none">{{ username }}</span>
+                <span
+                    class="name-span"
+                    style="text-decoration: none"
+                >{{username}}</span
+                >
               </div>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -188,7 +192,7 @@ const truncateText = (text, maxLength) => {
 
 .link-span {
   color: #fff;
-  opacity: 0.6;
+  opacity: .6;
   margin-right: 30px;
   font-size: 16px;
   font-family: 'Helvetica Neue', Helvetica, STHeiTi, Arial, sans-serif;
@@ -204,7 +208,7 @@ const truncateText = (text, maxLength) => {
 
 .name-span {
   color: #fff;
-  opacity: 0.6;
+  opacity: .6;
   margin-right: 30px;
   font-size: 12px;
   font-family: 'Helvetica Neue', Helvetica, STHeiTi, Arial, sans-serif;
