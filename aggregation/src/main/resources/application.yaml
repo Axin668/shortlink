@@ -50,3 +50,14 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
+
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: short-link_project-service_stats-save_pg_axin
+    topic: short-link_project-service_topic_axin
+    send-message-timeout: 2000
+    retry-times-when-send-failed: 1
+    retry-times-when-send-async-failed: 1
+  consumer:
+    group: short-link_project-service_stats-save_cg_axin

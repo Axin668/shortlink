@@ -204,10 +204,10 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         } else {
             RReadWriteLock readWriteLock = redissonClient.getReadWriteLock(String.format(LOCK_GID_UPDATE_KEY, requestParam.getFullShortUrl()));
             RLock rLock = readWriteLock.writeLock();
-            if (!rLock.tryLock()) {
-                throw new ServiceException("短链接正在被访问, 请稍后再试...");
-            }
-            // rLock.lock();  使用Rocket MQ 已经做过了削峰, 延迟队列的作用没那么大, 可以同步等一等
+//            if (!rLock.tryLock()) {
+//                throw new ServiceException("短链接正在被访问, 请稍后再试...");
+//            }
+            rLock.lock();  // 使用Rocket MQ 已经做过了削峰, 延迟队列的作用没那么大, 可以同步等一等
             try {
                 LambdaUpdateWrapper<ShortLinkDO> linkUpdateWrapper = Wrappers.lambdaUpdate(ShortLinkDO.class)
                         .eq(ShortLinkDO::getFullShortUrl, requestParam.getFullShortUrl())
