@@ -22,6 +22,7 @@ import static com.axinstar.shortlink.project.common.constant.RedisKeyConstant.DE
  */
 @Slf4j
 @Component
+@Deprecated
 @RequiredArgsConstructor
 public class DelayShortLinkStatsConsumer implements InitializingBean {
 

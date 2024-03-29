@@ -17,6 +17,7 @@ import static com.axinstar.shortlink.project.common.constant.RedisKeyConstant.DE
  */
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class DelayShortLinkStatsProducer {
 
     private final RedissonClient redissonClient;
