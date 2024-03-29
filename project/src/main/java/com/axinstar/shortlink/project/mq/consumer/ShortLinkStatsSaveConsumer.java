@@ -83,6 +83,8 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
             // 消息消费失败, 要将redis中的消费唯一标识删除, 以便消费重试
             messageQueueIdempotentHandler.delMessageProcessed(id.toString());
             log.error("记录短链接监控消费异常", ex);
+            // 抛出异常, 避免消费者传ack给broker, 让消费者重试
+            throw ex;
         }
         // 设置消息走完流程(防止宕机、断电等极端情况导致走不到"删除唯一标识"步骤)
         // Accomplish相关方法均是为了防止极端情况
