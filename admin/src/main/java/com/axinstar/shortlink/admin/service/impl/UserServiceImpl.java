@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSON;
+import com.axinstar.shortlink.admin.common.biz.user.UserContext;
 import com.axinstar.shortlink.admin.common.constant.RedisCacheConstant;
 import com.axinstar.shortlink.admin.common.convention.exception.ClientException;
 import com.axinstar.shortlink.admin.common.enums.UserErrorCodeEnum;
@@ -30,6 +31,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.axinstar.shortlink.admin.common.constant.RedisCacheConstant.USER_LOGIN_KEY;
@@ -69,21 +71,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
             throw new ClientException(UserErrorCodeEnum.USER_NAME_EXIST);
         }
         RLock lock = redissonClient.getLock(RedisCacheConstant.LOCK_USER_REGISTER_KEY + requestParam.getUsername());
-        try {
-            if (lock.tryLock()) {
-                try {
-                    int inserted = baseMapper.insert(BeanUtil.toBean(requestParam, UserDO.class));
-                    if (inserted < 1) {
-                        throw new ClientException(UserErrorCodeEnum.USER_SAVE_ERROR);
-                    }
-                } catch (DuplicateKeyException ex) {
-                    throw new ClientException(UserErrorCodeEnum.USER_EXIST);
-                }
-                userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
-                groupService.saveGroup(requestParam.getUsername(), "默认分组");
-                return;
-            }
+        if (!lock.tryLock()) {
             throw new ClientException(UserErrorCodeEnum.USER_NAME_EXIST);
+        }
+        try {
+            try {
+                Thread.sleep(100000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            int inserted = baseMapper.insert(BeanUtil.toBean(requestParam, UserDO.class));
+            if (inserted < 1) {
+                throw new ClientException(UserErrorCodeEnum.USER_SAVE_ERROR);
+            }
+            userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
+            groupService.saveGroup(requestParam.getUsername(), "默认分组");
+        } catch (DuplicateKeyException ex) {
+            throw new ClientException(UserErrorCodeEnum.USER_EXIST);
         } finally {
             lock.unlock();
         }
