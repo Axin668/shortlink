@@ -91,9 +91,11 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
 
     public void actualSaveShortLinkStats(String fullShortUrl, String gid, ShortLinkStatsRecordDTO statsRecord) {
         fullShortUrl = Optional.ofNullable(fullShortUrl).orElse(statsRecord.getFullShortUrl());
+        // 如果短链接的分组被修改了, 那么很多统计信息都要变, 这里要用分布式锁做同步(因为可能有写锁在修改)
         RReadWriteLock readWriteLock = redissonClient.getReadWriteLock(String.format(LOCK_GID_UPDATE_KEY, fullShortUrl));
         RLock rLock = readWriteLock.readLock();
         if (!rLock.tryLock()) {
+            // 避免阻塞, 先延迟处理
             delayShortLinkStatsProducer.send(statsRecord);
             return;
         }
