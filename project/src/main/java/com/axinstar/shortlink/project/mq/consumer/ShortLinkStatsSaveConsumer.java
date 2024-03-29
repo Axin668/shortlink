@@ -99,6 +99,7 @@ public class ShortLinkStatsSaveConsumer implements StreamListener<String, MapRec
             delayShortLinkStatsProducer.send(statsRecord);
             return;
         }
+        // rLock.lock();  使用Rocket MQ 已经做过了削峰, 延迟队列的作用没那么大, 可以同步等一等(使用的话要注释上边的tryLock()并且删除延迟队列)
         try {
             if (StrUtil.isBlank(gid)) {
                 LambdaQueryWrapper<ShortLinkGotoDO> queryWrapper = Wrappers.lambdaQuery(ShortLinkGotoDO.class)
